@@ -1,9 +1,10 @@
 import { Typography } from "@material-ui/core";
 import Actions from "components/Actions";
 import Button from "components/Button";
+import ReportButton from "components/Navigation/ReportButton";
 import PageTitle from "components/PageTitle";
-import ReportButton from "features/ReportButton";
-import { Link, useHistory } from "react-router-dom";
+import { useRouter } from "next/dist/client/router";
+import Link from "next/link";
 import { baseRoute } from "routes";
 import makeStyles from "utils/makeStyles";
 
@@ -23,10 +24,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ErrorFallback({ isFatal }: { isFatal?: boolean }) {
   const classes = useStyles();
+  const router = useRouter();
 
-  const history = useHistory();
-
-  const handleRefresh = () => history.go(0);
+  const handleRefresh = () => router.reload();
 
   return (
     <>
@@ -42,8 +42,10 @@ export default function ErrorFallback({ isFatal }: { isFatal?: boolean }) {
 
       <Actions>
         {!isFatal && (
-          <Link to={{ pathname: baseRoute }}>
-            <Button variant="outlined">{GO_TO_HOMEPAGE}</Button>
+          <Link href={baseRoute} passHref>
+            <a>
+              <Button variant="outlined">{GO_TO_HOMEPAGE}</Button>
+            </a>
           </Link>
         )}
 

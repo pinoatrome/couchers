@@ -1,14 +1,15 @@
 import { Divider, Typography } from "@material-ui/core";
+import { COUCHERS } from "appConstants";
 import classNames from "classnames";
 import StyledLink from "components/StyledLink";
+import { useRouter } from "next/dist/client/router";
 import { useEffect } from "react";
-import { Redirect, useLocation, useParams } from "react-router-dom";
 import CouchersLogo from "resources/CouchersLogo";
 import makeStyles from "utils/makeStyles";
+import stringOrFirstString from "utils/stringOrFirstString";
 
 import Alert from "../../../components/Alert";
 import HtmlMeta from "../../../components/HtmlMeta";
-import { COUCHERS } from "../../../constants";
 import { signupRoute } from "../../../routes";
 import { useAuthContext } from "../AuthProvider";
 import {
@@ -29,9 +30,13 @@ export default function Login() {
   const authenticated = authState.authenticated;
   const error = authState.error;
 
-  const location = useLocation<undefined | { from: Location }>();
-  const redirectTo = location.state?.from?.pathname || "/";
-  const { urlToken } = useParams<{ urlToken: string }>();
+  const router = useRouter();
+  const redirectTo = stringOrFirstString(router.query.from) || "/";
+  const urlToken = stringOrFirstString(router.query.urlToken);
+
+  if (authenticated) {
+    router.push(redirectTo);
+  }
 
   const authClasses = useAuthStyles();
   const classes = useStyles();
@@ -46,7 +51,6 @@ export default function Login() {
   return (
     <>
       <HtmlMeta title={LOGIN} />
-      {authenticated && <Redirect to={redirectTo} />}
       <div className={classNames(authClasses.page, authClasses.pageBackground)}>
         <header className={authClasses.header}>
           <div className={authClasses.logoContainer}>
@@ -84,7 +88,7 @@ export default function Login() {
             <LoginForm />
             <Typography>
               {NO_ACCOUNT_YET + " "}
-              <StyledLink to={signupRoute}>{SIGN_UP}</StyledLink>
+              <StyledLink href={signupRoute}>{SIGN_UP}</StyledLink>
             </Typography>
           </div>
         </div>

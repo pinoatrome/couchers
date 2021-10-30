@@ -1,5 +1,5 @@
 import { TERMS_OF_SERVICE } from "features/auth/constants";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { tosRoute } from "routes";
 import makeStyles from "utils/makeStyles";
 
@@ -13,8 +13,10 @@ const useStyles = makeStyles((theme) => ({
 export default function TOSLink() {
   const classes = useStyles();
   return (
-    <Link className={classes.root} to={tosRoute} target="_blank">
-      {TERMS_OF_SERVICE}
+    <Link href={tosRoute}>
+      <a target="_blank" className={classes.root}>
+        {TERMS_OF_SERVICE}
+      </a>
     </Link>
   );
 }

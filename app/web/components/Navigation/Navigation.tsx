@@ -12,7 +12,6 @@ import { CloseIcon, MenuIcon } from "components/Icons";
 import ExternalNavButton from "components/Navigation/ExternalNavButton";
 import { useAuthContext } from "features/auth/AuthProvider";
 import useAuthStyles from "features/auth/useAuthStyles";
-import ReportButton from "features/ReportButton";
 import useNotifications from "features/useNotifications";
 import React from "react";
 import CouchersLogo from "resources/CouchersLogo";
@@ -35,8 +34,9 @@ import {
   MAP_SEARCH,
   MESSAGES,
   PROFILE,
-} from "../../constants";
+} from "../../appConstants";
 import NavButton from "./NavButton";
+import ReportButton from "./ReportButton";
 
 const menu = (data: ReturnType<typeof useNotifications>["data"]) => [
   {
