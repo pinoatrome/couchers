@@ -8,7 +8,7 @@ import * as Sentry from "@sentry/react";
 import mediaQuery from "css-mediaquery";
 import sentryTestkit from "sentry-testkit";
 
-import user from "./test/fixtures/defaultUser.json";
+import user from "./fixtures/defaultUser.json";
 
 jest.mock("./service");
 
