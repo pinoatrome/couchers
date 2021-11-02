@@ -8,7 +8,7 @@ import {
   Typography,
   TypographyVariant,
 } from "@material-ui/core";
-import * as Sentry from "@sentry/react";
+import * as Sentry from "@sentry/nextjs";
 import Alert from "components/Alert";
 import Button from "components/Button";
 import { ERROR_INFO_FATAL } from "components/ErrorFallback/constants";
