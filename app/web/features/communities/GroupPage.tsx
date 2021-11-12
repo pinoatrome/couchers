@@ -8,11 +8,12 @@ import HtmlMeta from "components/HtmlMeta";
 import Markdown from "components/Markdown";
 import PageTitle from "components/PageTitle";
 import TextBody from "components/TextBody";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { Discussion } from "proto/discussions_pb";
 import { Group } from "proto/groups_pb";
 import { Page } from "proto/pages_pb";
 import React, { useEffect, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
 import {
   routeToCommunity,
   routeToDiscussion,
@@ -23,7 +24,13 @@ import {
 import { service } from "service";
 import isGrpcError from "utils/isGrpcError";
 
-export default function GroupPage() {
+export default function GroupPage({
+  groupId,
+  groupSlug,
+}: {
+  groupId: string;
+  groupSlug?: string;
+}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [group, setGroup] = useState<Group.AsObject | null>(null);
@@ -44,13 +51,6 @@ export default function GroupPage() {
   const [discussions, setDiscussions] =
     useState<Array<Discussion.AsObject> | null>(null);
 
-  const history = useHistory();
-
-  const { groupId, groupSlug } = useParams<{
-    groupId: string;
-    groupSlug?: string;
-  }>();
-
   const handleJoin = async () => {
     await service.groups.joinGroup(group!.groupId);
   };
@@ -58,6 +58,8 @@ export default function GroupPage() {
   const handleLeave = async () => {
     await service.groups.leaveGroup(group!.groupId);
   };
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!groupId) return;
@@ -68,7 +70,7 @@ export default function GroupPage() {
         setGroup(group);
         if (group.slug !== groupSlug) {
           // if the address is wrong, redirect to the right place
-          history.push(routeToGroup(group.groupId, group.slug));
+          router.push(routeToGroup(group.groupId, group.slug));
         }
       } catch (e) {
         console.error(e);
@@ -126,7 +128,7 @@ export default function GroupPage() {
       }
       setDiscussionsLoading(false);
     })();
-  }, [groupId, groupSlug, history]);
+  }, [groupId, groupSlug, router]);
 
   return (
     <>
@@ -144,20 +146,23 @@ export default function GroupPage() {
                 if (parent.community) {
                   return (
                     <Link
-                      to={routeToCommunity(
+                      href={routeToCommunity(
                         parent.community.communityId,
                         parent.community.slug
                       )}
                     >
-                      {parent.community.name}
+                      <a>{parent.community.name}</a>
                     </Link>
                   );
                 } else if (parent.group) {
                   return (
                     <Link
-                      to={routeToGroup(parent.group.groupId, parent.group.slug)}
+                      href={routeToGroup(
+                        parent.group.groupId,
+                        parent.group.slug
+                      )}
                     >
-                      {parent.group.name}
+                      <a>{parent.group.name}</a>
                     </Link>
                   );
                 } else {
@@ -236,8 +241,8 @@ export default function GroupPage() {
             places.map((place) => {
               return (
                 <>
-                  <Link to={routeToPlace(place.pageId, place.slug)}>
-                    {place.title}
+                  <Link href={routeToPlace(place.pageId, place.slug)}>
+                    <a>{place.title}</a>
                   </Link>
                   <br />
                 </>
@@ -253,8 +258,8 @@ export default function GroupPage() {
             guides.map((guide) => {
               return (
                 <>
-                  <Link to={routeToGuide(guide.pageId, guide.slug)}>
-                    {guide.title}
+                  <Link href={routeToGuide(guide.pageId, guide.slug)}>
+                    <a>{guide.title}</a>
                   </Link>
                   <br />
                 </>
@@ -271,12 +276,12 @@ export default function GroupPage() {
               return (
                 <>
                   <Link
-                    to={routeToDiscussion(
+                    href={routeToDiscussion(
                       discussion.discussionId,
                       discussion.slug
                     )}
                   >
-                    {discussion.title}
+                    <a>{discussion.title}</a>
                   </Link>
                   <br />
                 </>

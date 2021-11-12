@@ -41,7 +41,7 @@ export default function Login() {
       ? stringOrFirstString(router.query.urlToken)
       : undefined;
 
-  if (authenticated && window !== "undefined") {
+  if (authenticated && typeof window !== "undefined") {
     router.push(redirectTo);
   }
 
