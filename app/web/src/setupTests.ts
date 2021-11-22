@@ -5,7 +5,9 @@
 import "@testing-library/jest-dom/extend-expect";
 
 import * as Sentry from "@sentry/react";
+import { waitFor } from "@testing-library/react";
 import mediaQuery from "css-mediaquery";
+import i18n from "i18n";
 import sentryTestkit from "sentry-testkit";
 
 import user from "./test/fixtures/defaultUser.json";
@@ -27,7 +29,12 @@ beforeAll(() => {
   });
 });
 
-beforeEach(() => testkit.reset());
+beforeEach(async () => {
+  await waitFor(() => {
+    expect(i18n.isInitialized).toBe(true);
+  });
+  testkit.reset();
+});
 
 afterEach(() => {
   global.localStorage.clear();

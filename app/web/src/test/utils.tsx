@@ -1,5 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
 import mediaQuery from "css-mediaquery";
+import i18n from "i18n";
 
 export function addDefaultUser(userId?: number) {
   window.localStorage.setItem("auth.authenticated", JSON.stringify(true));
@@ -53,4 +54,8 @@ export function createMatchMedia(width: number) {
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   });
+}
+
+export function t(translationKey: string) {
+  return i18n.t(translationKey);
 }
